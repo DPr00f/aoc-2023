@@ -6,42 +6,33 @@ const isNumber = (char: string) => {
 
 const getGameInfo = (line: string) => {
   let gameID = 0;
-  let gameStarted = false;
-  let red = 0;
-  let green = 0;
-  let blue = 0;
-  let gameRed = 0;
-  let gameGreen = 0;
-  let gameBlue = 0;
+  const max = { r: 0, g: 0, b: 0 };
+  const current = { r: 0, g: 0, b: 0 };
   let prevStr = '';
 
   for (let i = 0; i < line.length; i++) {
     const char = line[i];
 
     if (char === ';') {
-      red = gameRed < red ? red : gameRed;
-      green = gameGreen < green ? green : gameGreen;
-      blue = gameBlue < blue ? blue : gameBlue;
-      gameBlue = 0;
-      gameRed = 0;
-      gameGreen = 0;
+      max.r = Math.max(max.r, current.r);
+      max.g = Math.max(max.g, current.g);
+      max.b = Math.max(max.b, current.b);
+      current.r = 0;
+      current.g = 0;
+      current.b = 0;
+
       continue;
     }
 
     if (!isNumber(char) && isNumber(prevStr)) {
-      if (!gameStarted) {
+      if (!gameID) {
         gameID = parseInt(prevStr, 10);
-        gameStarted = true;
       }
 
       const colorChar = line[i + 1];
 
-      if (colorChar === 'r') {
-        gameRed += parseInt(prevStr, 10);
-      } else if (colorChar === 'g') {
-        gameGreen += parseInt(prevStr, 10);
-      } else if (colorChar === 'b') {
-        gameBlue += parseInt(prevStr, 10);
+      if (['r', 'g', 'b'].includes(colorChar)) {
+        current[colorChar] += parseInt(prevStr, 10);
       }
 
       prevStr = '';
@@ -54,7 +45,7 @@ const getGameInfo = (line: string) => {
     }
   }
 
-  return { gameID, red, green, blue };
+  return { gameID, r: max.r, g: max.g, b: max.b };
 };
 
 export const run = (inputSrc: string) => {
@@ -67,7 +58,7 @@ export const run = (inputSrc: string) => {
   for (const line of lines) {
     const data = getGameInfo(line + ';');
 
-    const power = data.red * data.green * data.blue;
+    const power = data.r * data.g * data.b;
 
     total += power;
   }
