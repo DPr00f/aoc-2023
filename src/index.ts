@@ -1,7 +1,12 @@
 import * as prompts from 'prompts';
+import yargs from 'yargs';
 
 import './days';
 import { execPart, getDay, getDays } from './config';
+
+const argv = yargs(process.argv).argv;
+
+prompts.override(argv);
 
 (async () => {
   const response = await prompts([
@@ -19,7 +24,7 @@ import { execPart, getDay, getDays } from './config';
     {
       type: 'select',
       name: 'part',
-      message: 'Pick AOC part',
+      message: `Pick ${day.title} part`,
       choices: day.parts.map((part) => ({ title: part.title, value: part.value })),
     },
   ]);
@@ -31,7 +36,7 @@ import { execPart, getDay, getDays } from './config';
       {
         type: 'select',
         name: 'input',
-        message: 'Pick AOC input',
+        message: `Pick ${day.title} input`,
         choices: day?.inputs.map((input) => ({ title: input.title, value: input.value })),
       },
     ]);

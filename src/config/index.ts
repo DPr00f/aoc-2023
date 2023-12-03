@@ -27,13 +27,13 @@ export const getDays = () => {
 };
 
 export const getDay = (dayValue: string) => {
-  return days.find((day) => day.value === dayValue);
+  return days.find((day) => day.value === String(dayValue));
 };
 
 export const getPart = (dayValue: string, partValue: string) => {
   const day = getDay(dayValue);
 
-  return day?.parts.find((part) => part.value === partValue);
+  return day?.parts.find((part) => part.value === String(partValue));
 };
 
 export const execPart = (dayValue: string, partValue: string, inputValue?: string) => {
