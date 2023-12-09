@@ -1,6 +1,10 @@
 import * as fs from 'fs';
 
-let linesById;
+type LinesById = {
+  [key: string]: string;
+};
+
+let linesById: LinesById = {};
 
 type LineData = {
   id: number;
